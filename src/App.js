@@ -9,6 +9,11 @@ import { setRole } from "./features/counter/profileSlice";
 //import { EmployerPage } from "./components/employerPage";
 //import { UploadFile } from "./components/uploadFile";
 
+/**
+ * The App function sets the title of the document and initiates Redux based on the user's
+ * authentication status.
+ * @returns The App component is being returned, which contains a Navbar and Browsing component.
+ */
 function App() {
 
   useEffect(() => {
@@ -24,9 +29,16 @@ function App() {
         const docRef = doc(db, "users", authUser.uid);
         const docSnap = await getDoc(docRef);
         if(docSnap.exists()){
-        dispatch(setRole({
-          role: docSnap.data().role
-        }))}
+          if(docSnap.data().role !== "null") {
+            dispatch(setRole({
+              role: docSnap.data().role
+            }))
+          } else {
+            dispatch(setRole({
+              role: null
+            }))
+          }
+        }
         else{
           dispatch(setRole({
             role: null
